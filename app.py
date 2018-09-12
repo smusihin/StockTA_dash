@@ -61,10 +61,10 @@ def update_graph(pair, indicator_name, param_rows):
          params[r['Parameter']]=r['Value']
      indicator.set_params(params)
      df = bf.get_candles(pair, '1M').sort_index()
-     data = [go.Scatter(x=pd.to_datetime(df.index, unit='ms'), y=df['CLOSE'], mode='lines')]
+     data = [go.Scatter(x=pd.to_datetime(df.index, unit='ms'), y=df['CLOSE'], mode='lines', name=pair)]
      df_i = indicator.calculate(df['CLOSE'])
      for column in df_i.columns:
-         data.append(go.Scatter(x=pd.to_datetime(df_i.index, unit='ms'), y=df_i[column]))
+         data.append(go.Scatter(x=pd.to_datetime(df_i.index, unit='ms'), y=df_i[column], name = column))
      return dict(data=data)
 
 
