@@ -74,11 +74,17 @@ def update_graph(pair,timeframe, indicator_name, param_rows):
          params[r['Parameter']]=r['Value']
      indicator.set_params(params)
      df = bf.get_candles(pair, timeframe).sort_index()
-     data = [go.Scatter(x=pd.to_datetime(df.index, unit='ms'), y=df['CLOSE'], mode='lines', name=pair)]
+     data = [go.Scatter(x=pd.to_datetime(df.index, unit='ms'), y=df['CLOSE'], mode='lines', name=pair, yaxis='y')]
      df_i = indicator.calculate(df['CLOSE'])
      for column in df_i.columns:
-         data.append(go.Scatter(x=pd.to_datetime(df_i.index, unit='ms'), y=df_i[column], name = column))
-     return dict(data=data)
+         data.append(go.Scatter(x=pd.to_datetime(df_i.index, unit='ms'), y=df_i[column], name = column, yaxis=indicator.yaxis))
+     if indicator.yaxis == 'y2':
+         layout_graph =  go.Layout(
+         yaxis2=dict(domain=[0, 0.45]),
+         yaxis=dict(domain=[0.55, 1]))
+     else:
+         layout_graph=[]
+     return dict(data=data, layout=layout_graph)
 
 
 @app.callback(dd.Output('indicator_description', 'children'), [dd.Input('indicator', 'value')],)
