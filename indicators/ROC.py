@@ -33,8 +33,8 @@ The Rate of Change (ROC) is also sometimes used to indicate overbought or overso
     def calculate(self, df):
         result = pd.DataFrame(index=df.index)
         n = self.params_list()['n']
-        M = df.diff(n - 1)
-        N = df.shift(n - 1)
+        M = df['CLOSE'].diff(n - 1)
+        N = df['CLOSE'].shift(n - 1)
         result['ROC'] = (M / N) * 100
         return result
 

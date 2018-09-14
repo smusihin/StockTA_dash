@@ -6,10 +6,10 @@ def ema(df, n):
     return df.ewm(span=n, min_periods=0).mean()
 
 
-class BollingerBands(Indicator):
+class PriceChannels(Indicator):
     def __init__(self):
         Indicator.__init__(self)
-        self.set_params({'n': 5})
+        self.set_params({'channel': 20, 'sma': 50})
 
     def description(self):
         return '''
@@ -19,10 +19,11 @@ class BollingerBands(Indicator):
 
     def calculate(self, df):
         result = pd.DataFrame(index=df.index)
-        result['20 ma'] = ema(df['CLOSE'], 20)
-        sd = df['CLOSE'].rolling(20).std()
-        result['Upper Band'] = result['20 ma'] + (sd *2)
-        result['Lower Band'] = result['20 ma'] - (sd *2)
+        tc = int(self.params_list()['channel'])
+        tsma = int(self.params_list()['sma'])
+        result['{} sma'.format(tsma)] = df['CLOSE'].rolling(tsma).mean()
+        result['4WL'] = df['LOW'].rolling(tc).min()
+        result['4WH'] = df['HIGH'].rolling(tc).max()
         return result
 
     def params_list(self):

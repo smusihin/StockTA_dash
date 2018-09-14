@@ -13,7 +13,7 @@ class MovingAverage(Indicator):
 
     def calculate(self, df):
         result = pd.DataFrame(index = df.index)
-        result['SMA'] = df.rolling(int(self.params_list()['n'])).mean()
+        result['SMA'] = df['CLOSE'].rolling(int(self.params_list()['n'])).mean()
         return result
 
     def params_list(self):

@@ -32,7 +32,7 @@ EMA stands for Exponential Moving Average.
 
     def calculate(self, df):
         result = pd.DataFrame(index=df.index)
-        result['MACD'] = ema(df,12) - ema(df,26)
+        result['MACD'] = ema(df['CLOSE'],12) - ema(df['CLOSE'],26)
         result['Signal'] = ema(result['MACD'],9)
         result['Crossover'] = result['MACD'] - result['Signal']
         return result
